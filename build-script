@@ -1,0 +1,36 @@
+#!/bin/bash
+
+GITREPO=https://github.com/jpd002/Play-.git
+REPODIR=Play-
+BUILD=Release
+
+
+cd $HOME
+if [ ! -d ${HOME}/${REPODIR}/.git ]; then
+    git clone --recurse-submodules $GITREPO
+fi
+
+#
+# Update Repo
+#
+cd ${HOME}/${REPODIR}
+git pull
+
+
+#
+# Create build dir
+#
+BUILDDIR=build
+
+[ ! -e $BUILDDIR ] && mkdir $BUILDDIR
+cd $BUILDDIR
+rm -f ../$BUILDDIR/*
+
+#
+# Compile
+#
+cmake clean
+#cmake .. -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=/opt/qt56/
+cmake .. -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+
